@@ -1,6 +1,6 @@
 - what is this app
 
-  - this app is to recomment reasonable items for 20's, since they don't have much money like adults.
+  - this app is to recommend reasonable items for 20's, since they don't have much money like adults.
   - so, offring exclusive discounts and promotions to 20's might increase users invovement, to purchase, and sales.
 
 - app function
