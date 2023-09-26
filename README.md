@@ -25,6 +25,11 @@
   - adding chatbot assistance
 
 - frontend
+
   - home.html
   - discounts_items.html
   - login.html
+
+- our task
+  - use branch named {name}\_dev
+  - use template named test\_{name} function to check api
