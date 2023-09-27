@@ -19,7 +19,8 @@ from django.urls import include, path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('reasonable_recommendation_app/','reasonable_recommendation_app.urls')
+    path('reasonable_recommendation_app/',include('reasonable_recommendation_app.urls'))
+
 
 
 ]
