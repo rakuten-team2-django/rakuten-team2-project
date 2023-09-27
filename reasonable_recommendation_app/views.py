@@ -58,10 +58,7 @@ def test_yuto(request):
 def test_bibek(request):
     return render(request, 'test_bibek.html', {})
 
-# def test_akiba(request):
-#     return render(request, 'reasonable_recommendation_app/test_akiba.html', {})
-
-class test_akiba(TemplateView):
-    template_name = 'reasonable_recommendation_app/test_akiba.html'
+def test_akiba(request):
+    return render(request, 'reasonable_recommendation_app/test_akiba.html', {})
 
 

@@ -21,6 +21,18 @@ class UserSignUpForm(forms.ModelForm):
             raise forms.ValidationError('Passwords don\'t match.')
         return cd['password2']
 
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if User.objects.filter(username=username).exists():
+
+            raise forms.ValidationError('A user with this username already exists.')
+        return username
+    def clean_email(self):
+            email = self.cleaned_data.get('email')
+            if User.objects.filter(email=email).exists():
+                raise forms.ValidationError('A user with this email address already exists.')
+            return email
+
 class UserLoginForm(forms.Form):
     username = forms.CharField(max_length=100)
     password = forms.CharField(widget=forms.PasswordInput)
