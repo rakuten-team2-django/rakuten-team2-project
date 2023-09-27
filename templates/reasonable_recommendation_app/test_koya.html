@@ -1,0 +1,19 @@
+<html>
+<head>
+<title>template test</title>
+</head>
+<body>
+<p>This is template test.</p>
+<p>{{ test }}</p>
+<form method="post">{% csrf_token %}
+    <input type="text" />
+    <input type="submit" />
+</form>
+<h1>List of prooducts</h1>
+    {% for product in product_list %}
+    <p>
+      ・{{ product }}
+    </p>
+    {% endfor %}
+</body>
+</html>
