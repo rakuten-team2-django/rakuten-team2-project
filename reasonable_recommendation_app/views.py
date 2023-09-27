@@ -93,7 +93,7 @@ def user_login(request):
             user = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password'])
             if user:
                 # Specify the custom backend when calling the login function
-                login(request, user, backend='myapp.backends.CustomUserAuthBackend')
+                login(request, user, backend='reasonable_recommendation_app.backends.CustomUserAuthBackend')
                 messages.success(request, 'Logged in successfully.')
                 return redirect('home')  # Redirect to a home page or any other page
             else:
