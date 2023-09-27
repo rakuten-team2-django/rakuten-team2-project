@@ -1,8 +1,8 @@
 from django.contrib import admin
 from django.urls import path
 
-from .views import (home, test_akiba, test_bibek, test_koya, test_yuto,
-                    user_login, user_logout, user_signup)
+from .auth import user_login, user_logout, user_signup
+from .views import home, test_akiba, test_bibek, test_koya, test_yuto
 
 urlpatterns = [
     path('admin/', admin.site.urls),
