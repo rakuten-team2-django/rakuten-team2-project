@@ -9,6 +9,9 @@
     <input type="text" name="keyword"/>
     <input type="submit" />
 </form>
+<form action="{% url 'reasonable_recommendation_app:test_koya/ranking_search' %}" method="get">{% csrf_token %}
+    <button type="submit">ランキング上位のみを表示する</button>
+</form>
 <h1>List of prooducts</h1>
     {% for product in product_list %}
     <p>
@@ -18,7 +21,7 @@
 <h1>List of Items</h1>
     {% for result_item in result_item_list %}
         <p>
-        ・Name: {{ result_item.name }} Price: {{ result_item.price }} Ranking: {{ result_item.ranking }}
+        ・Name: {{ result_item.item_name }} Price: {{ result_item.item_price }} Ranking: {{ result_item.ranking }}
         </p>
         {% for image_url in result_item.image_urls %}
             <img src="{{ image_url }}">
