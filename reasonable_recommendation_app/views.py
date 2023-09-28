@@ -1,13 +1,11 @@
 import requests
-from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.hashers import check_password, make_password
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView
 
 
-
+@login_required(login_url=reverse_lazy('login'))
 def home(request):
     print(request.user)
     if request.user.is_authenticated:
