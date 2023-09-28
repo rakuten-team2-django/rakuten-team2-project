@@ -123,3 +123,4 @@ you should ask,
 
 - [team2 github](https://github.com/rakuten-team2-django)
 - [rakuten ichiba api](https://webservice.rakuten.co.jp/)
+- [presentation slide](https://docs.google.com/presentation/d/1zx-Y85HS6XuO0uOV3o4ksCf6mKtVVT9J84oYPBB15r4/edit#slide=id.p)
