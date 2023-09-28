@@ -13,9 +13,9 @@ class DiscountApplier(ListView):
     model = Item
 
     # TODO: Change name
-    template_name = 'reasonable_recommendation_app/discounts_items.html'
+    template_name = 'reasonable_recommendation_app/test_yuto.html'
 
-    # paginate_by = 10
+    paginate_by = 10
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -25,7 +25,7 @@ class DiscountApplier(ListView):
         if check_age(user_info):
             for item in context['item_list']:
                 item = apply_discount(item)
-                item['discount_rate'] = DISCOUNTRATE
+                item.discount_rate = DISCOUNTRATE
         
         return context
     
