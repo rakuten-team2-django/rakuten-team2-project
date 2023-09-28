@@ -20,8 +20,9 @@
   <body>
     <header>
       <!-- Navigation Bar -->
-      <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container">
+      <nav class="navbar navbar-expand navbar-light bg-light">
+        <!-- Changed navbar-expand-lg to navbar-expand -->
+        <div class="container-fluid">
           <a class="navbar-brand" href="#">Reasonable Recommendation App</a>
           <button
             class="navbar-toggler"
@@ -34,17 +35,23 @@
           >
             <span class="navbar-toggler-icon"></span>
           </button>
-          <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
+          <div
+            class="collapse navbar-collapse d-flex flex-column align-items-end"
+            id="navbarNav"
+          >
+            <ul class="navbar-nav">
+              {% if not user.is_authenticated %}
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'signup' %}">Signup</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'login' %}">Login</a>
               </li>
+              {% endif %} {% if user.is_authenticated %}
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'logout' %}">Logout</a>
               </li>
+              {% endif %}
             </ul>
           </div>
         </div>
