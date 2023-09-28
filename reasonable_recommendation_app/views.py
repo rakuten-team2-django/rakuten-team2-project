@@ -1,12 +1,21 @@
-from django.shortcuts import render
-from django.views.generic import TemplateView
 import requests
 import time
-
-# Create your views here.
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.hashers import check_password, make_password
+from django.shortcuts import redirect, render
+from django.urls import reverse_lazy
+from django.views.generic import TemplateView
 
 def home(request):
-    return render(request, 'reasonable_recommendation_app/home.html', {})
+    print(request.user)
+    if request.user.is_authenticated:
+        user = request.user
+    else:
+        user = None
+
+    context = {'user': user}
+    return render(request, 'reasonable_recommendation_app/home.html', context)
 
 class test_koya(TemplateView):
     def __init__(self):
@@ -96,4 +105,5 @@ def test_bibek(request):
 
 def test_akiba(request):
     return render(request, 'reasonable_recommendation_app/test_akiba.html', {})
+
 
