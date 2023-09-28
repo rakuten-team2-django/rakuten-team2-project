@@ -9,8 +9,11 @@ def home(request):
     return render(request, 'reasonable_recommendation_app/home.html', {})
 
 class test_koya(TemplateView):
-    template_name = "reasonable_recommendation_app/test_koya.html"
-    
+    def __init__(self):
+        self.template_name = "reasonable_recommendation_app/test_koya.html"
+        self.search_url = "https://app.rakuten.co.jp/services/api/IchibaItem/Search/20220601"
+        self.ranking_url = "https://app.rakuten.co.jp/services/api/IchibaItem/Ranking/20220601"
+     
     def get_context_data(self, **kwargs: any) -> dict[str, any]:
         context_data = super().get_context_data(**kwargs)
         context_data["test"] = "This is test Message"
@@ -21,21 +24,42 @@ class test_koya(TemplateView):
         context_data["product_list"] = product_list
         return context_data
     
-    def fetch_all_page_items(self, request, num_page):
+    def fetch_all_page_items(self, rakutenAPI_url, num_page,request=None):
         all_res_data = []
         for i in range(1,num_page+1):
-            params = {"applicationId" : "1086392607264524220",
-                    "keyword" : request.POST["keyword"],
-                    "format" : "json",
-                    "page" :i}   
-            res_data = requests.get("https://app.rakuten.co.jp/services/api/IchibaItem/Search/20220601", params).json()
+            if rakutenAPI_url == self.search_url:
+                params = {"applicationId" : "1086392607264524220",
+                        "keyword" : request.POST["keyword"],
+                        "format" : "json",
+                        "page" :i}   
+            elif rakutenAPI_url == self.ranking_url:
+                params = {"applicationId" : "1086392607264524220",
+                        "format" : "json",
+                        "page" :i}   
+            res_data = requests.get(rakutenAPI_url, params).json()
             all_res_data.extend(res_data["Items"])
             time.sleep(0.2)
         result_item_list = []
         for item in  all_res_data:
-            result_item = test_koya_ResultItem(item["Item"]["itemName"], item["Item"]["itemPrice"])
+            result_item = test_koya_ResultItem(item["Item"]["itemName"], item["Item"]["itemPrice"], item["Item"]["itemCode"])
             result_item_list.append(result_item)
         return result_item_list
+   
+    def add_ranking_to_result_item_list(self, result_item_list):
+        ranking_list = self.fetch_all_page_items(self.ranking_url, 30)
+        result_item_list_tmp = result_item_list.copy()
+        #検索結果のアイテムリストにランキング情報を付与する。
+        for result_item in result_item_list_tmp:
+            for i in range(len(ranking_list)):
+                if result_item.item_code == ranking_list[i].item_code:
+                    result_item.ranking = i
+        
+        #ランキングがつかなかったアイテムを削除
+        result_item_list_added_ranking = [item for item in result_item_list_tmp if item.ranking != None]
+        return result_item_list_added_ranking
+    
+    def sort_result_item_list_ascending_price(result_item_list):
+        return
     
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
@@ -52,14 +76,17 @@ class test_koya(TemplateView):
             result_item = test_koya_ResultItem(item["Item"]["itemName"], item["Item"]["itemPrice"])
             result_item_list.append(result_item)
         """
-        result_item_list = self.fetch_all_page_items(request, 10)
-        context = {"result_item_list": result_item_list}
+        result_item_list = self.fetch_all_page_items(self.search_url, 30, request)
+        result_item_list_added_ranking = self.add_ranking_to_result_item_list(result_item_list)
+        context = {"result_item_list": result_item_list_added_ranking}
         return super().render_to_response(context)
     
 class test_koya_ResultItem:
-    def __init__(self, name, price):
+    def __init__(self, name, price, item_code):
         self.name = name
         self.price = price
+        self.item_code = item_code
+        self.ranking = None
 
 def test_yuto(request):
     return render(request, 'test_yuto.html', {})
