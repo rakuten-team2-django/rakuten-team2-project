@@ -1,0 +1,16 @@
+<!-- view_data.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Stored Data</title>
+</head>
+<body>
+    <h1>Stored Data</h1>
+    <ul>
+        {% for item in items %}
+            <li>
+                {{ item.itemName }} - {{ item.sales_count }} - {{ item.itemPrice }} - <a href="{{ item.itemUrl }}" target="_blank">Link</a>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
