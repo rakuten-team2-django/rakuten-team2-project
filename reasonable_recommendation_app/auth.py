@@ -16,6 +16,8 @@ def user_signup(request):
             login(request, user)
             messages.success(request, 'Registration successful.')
             return redirect('home')
+        else:
+            print(form.errors)
     else:
         form = UserSignUpForm(initial={'birthday': '1990-01-01'})
     return render(request, 'reasonable_recommendation_app/signup.html', {'form': form})
