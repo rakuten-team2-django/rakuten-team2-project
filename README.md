@@ -89,6 +89,14 @@ after the presentation of each group's presentation, each person from that group
 - good points
 - areas for improvement if you were to improve on your own in the future, what would you like to do?
 
+### advice
+
+For example, if you are presenting to your company's senior management,
+you should ask,
+"How much impact will this have on the company's market share?"
+"How much revenue can we generate?"
+"What is the future growth potential?"
+
 ## [individual presentation]
 
 - maximum 2 minutes per person
