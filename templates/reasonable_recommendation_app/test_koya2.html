@@ -19,13 +19,27 @@
     </p>
     {% endfor %}
 <h1>List of Items</h1>
+
+    <table border="1">
+        <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Ranking</th>
+            <th>Images</th>
+        </tr>
+    
     {% for result_item in result_item_list %}
-        <p>
-        ・Name: {{ result_item.item_name }} Price: {{ result_item.item_price }} Ranking: {{ result_item.ranking }}
-        </p>
-        {% for image_url in result_item.image_urls %}
-            <img src="{{ image_url }}">
-        {% endfor %}
+        <tr>
+            <td>{{ result_item.item_name }}</td>
+            <td>{{ result_item.item_price }}</td>
+            <td>{{ result_item.ranking }}</td>
+            <td>
+                {% for image_url in result_item.image_urls %}
+                    <img src="{{ image_url }}">
+                {% endfor %}
+            </td>
+        </tr>
     {% endfor %}
+    </table>
 </body>
 </html>
