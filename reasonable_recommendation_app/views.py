@@ -20,12 +20,12 @@ def home(request):
 
 class test_koya_Search(TemplateView):
     def __init__(self):
-        self.template_name = "reasonable_recommendation_app/test_koya.html"
+        self.template_name = "reasonable_recommendation_app/test_koya2.html"
         self.search_url = "https://app.rakuten.co.jp/services/api/IchibaItem/Search/20220601"
         self.ranking_url = "https://app.rakuten.co.jp/services/api/IchibaItem/Ranking/20220601"
     
     def post(self, request, *args, **kwargs):
-        result_item_list = test_koya_APIListOperations().fetch_all_page_items(self.search_url, 20, request)
+        result_item_list = test_koya_APIListOperations().fetch_all_page_items(self.search_url, 5, request)
         result_item_list_sorted = test_koya_APIListOperations.bubble_sort_result_item_list_ascending_price(result_item_list)
         ResultItemsModel.objects.all().delete()
         for result_item in result_item_list_sorted:
@@ -35,7 +35,7 @@ class test_koya_Search(TemplateView):
     
 class test_koya_RankingSearch(TemplateView):
     def __init__(self):
-        self.template_name = "reasonable_recommendation_app/test_koya.html"
+        self.template_name = "reasonable_recommendation_app/test_koya2.html"
         self.search_url = "https://app.rakuten.co.jp/services/api/IchibaItem/Search/20220601"
         self.ranking_url = "https://app.rakuten.co.jp/services/api/IchibaItem/Ranking/20220601"
     
@@ -60,9 +60,8 @@ class test_koya_RankingSearch(TemplateView):
         return super().render_to_response(context)
     
 class test_koya_APIListOperations:
-    
     @staticmethod
-    def fetch_all_page_items(rakutenAPI_url, num_page,request=None):
+    def fetch_all_page_items(rakutenAPI_url, num_page, request=None):
         search_url = "https://app.rakuten.co.jp/services/api/IchibaItem/Search/20220601"
         ranking_url = "https://app.rakuten.co.jp/services/api/IchibaItem/Ranking/20220601"
         all_res_data = []
@@ -74,7 +73,7 @@ class test_koya_APIListOperations:
                             "page" :i}   
             elif rakutenAPI_url == ranking_url:
                 params = {"applicationId" : "1086392607264524220",
-                            "age": 20,
+                            #"age": 20,
                             "format" : "json",
                             "page" :i}   
             res_data = requests.get(rakutenAPI_url, params).json()
