@@ -11,9 +11,10 @@ urlpatterns = [
     path('test_koya/',test_koya_Search.as_view(), name='test_koya'),
     path('test_koya/ranking_search',test_koya_RankingSearch.as_view(), name='test_koya/ranking_search'),
     path('test_yuto/',test_yuto, name='test_yuto'),
-    path('test_bibek/',test_bibek, name='test_bibek'),
+    path('disc_items/',test_bibek, name='fetch_least_sold_items'),
     path('test_akiba/',test_akiba, name='test_akiba'),
     path('signup/', user_signup, name='signup'),
     path('login/', user_login, name='login'),
     path('logout/', user_logout, name='logout'),
+    path('database_data/',test_bibek,name="database_data")
 ]
