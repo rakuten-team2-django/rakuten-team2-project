@@ -42,14 +42,26 @@
             <ul class="navbar-nav">
               {% if not user.is_authenticated %}
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'signup' %}">Signup</a>
+                <a
+                  class="nav-link"
+                  href="{% url 'reasonable_recommendation_app:signup' %}"
+                  >Signup</a
+                >
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'login' %}">Login</a>
+                <a
+                  class="nav-link"
+                  href="{% url 'reasonable_recommendation_app:login' %}"
+                  >Login</a
+                >
               </li>
               {% endif %} {% if user.is_authenticated %}
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                <a
+                  class="nav-link"
+                  href="{% url 'reasonable_recommendation_app:logout' %}"
+                  >Logout</a
+                >
               </li>
               {% endif %}
             </ul>

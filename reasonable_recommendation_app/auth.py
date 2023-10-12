@@ -15,7 +15,7 @@ def user_signup(request):
             user.save()
             login(request, user)
             messages.success(request, 'Registration successful.')
-            return redirect('home')
+            return redirect('reasonable_recommendation_app:home')
         else:
             print(form.errors)
     else:
@@ -32,7 +32,7 @@ def user_login(request):
             if user:
                 login(request, user, backend='reasonable_recommendation_app.backends.CustomUserAuthBackend')
                 messages.success(request, 'Logged in successfully.')
-                return redirect('home')  
+                return redirect('reasonable_recommendation_app:home')  
             else:
                 messages.error(request, 'Invalid login credentials.')
     else:
@@ -42,4 +42,4 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     messages.success(request, 'Logged out successfully.')
-    return redirect('home')  
+    return redirect('reasonable_recommendation_app:home')  

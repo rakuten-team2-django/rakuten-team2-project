@@ -1,0 +1,53 @@
+.living-expenses-normal {
+    color: black;
+}
+
+.living-expenses-good {
+    font-weight: bold;
+    background-size: 120%; 
+    background-color: rgba(255, 255, 255, 0); 
+}
+
+.living-expenses-bad {
+    color: red;
+}
+
+.search-result {
+    display: table;
+    width: 90%;
+    margin: 0 auto;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+}
+
+.search-result h2 {
+    text-align: center;
+}
+
+.search-result table {
+    margin: auto 10%;
+}
+
+.search-result th {
+    text-align: center;
+    background-color: rgb(245, 244, 244);
+}
+
+.search-result td {
+    text-align: center;
+}
+
+
+.page-change .form-container {
+    display: flex;
+    margin: 30px 100px;
+    justify-content: center;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+    background-color: rgb(245, 244, 244);
+    padding: 10px;
+}
+
+.page-change .form-container input{
+    width: 30px;
+    height: 30px;
+}
