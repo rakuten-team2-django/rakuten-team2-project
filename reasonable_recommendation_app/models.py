@@ -20,7 +20,7 @@ class Discounted_Items(models.Model):
     product_name=models.CharField(max_length=200,blank=True, null=True)
     product_price=models.DecimalField(max_digits=10,decimal_places=2)
     productimg_url=models.URLField(null=True)
-    product_link = models.URLFIELD(null=True)
+    product_link = models.URLField(null=True)
     product_rank = models.IntegerField(null=True)
 
     
