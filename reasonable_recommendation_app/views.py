@@ -9,6 +9,7 @@ import requests
 from reasonable_recommendation_app.models import Discounted_Items
 from django.core.management.base import BaseCommand
 from django.http import JsonResponse
+import datetime
 
 @login_required(login_url=reverse_lazy('login'))
 def home(request):
@@ -20,19 +21,25 @@ def home(request):
     context = {'user': user}
     return render(request, 'reasonable_recommendation_app/home.html', context)
 
-class test_koya_Search(TemplateView):
+class test_koya_Home(TemplateView):
     def __init__(self):
-        self.template_name = "reasonable_recommendation_app/test_koya2.html"
+        self.template_name = "reasonable_recommendation_app/test_koya_home.html"
+        self.search_url = "https://app.rakuten.co.jp/services/api/IchibaItem/Search/20220601"
+        self.ranking_url = "https://app.rakuten.co.jp/services/api/IchibaItem/Ranking/20220601"
+
+class test_koya_Search_Reasonable(TemplateView):
+    def __init__(self):
+        self.template_name = "reasonable_recommendation_app/test_koya_search_reasonable.html"
         self.search_url = "https://app.rakuten.co.jp/services/api/IchibaItem/Search/20220601"
         self.ranking_url = "https://app.rakuten.co.jp/services/api/IchibaItem/Ranking/20220601"
     
-    def post(self, request, *args, **kwargs):
-        result_item_list = test_koya_APIListOperations().fetch_all_page_items(self.search_url, 5, request)
-        result_item_list_sorted = test_koya_APIListOperations.bubble_sort_result_item_list_ascending_price(result_item_list)
-        ResultItemsModel.objects.all().delete()
-        for result_item in result_item_list_sorted:
-            ResultItemsModel.objects.create(item_name=result_item.item_name, item_price=result_item.item_price, item_code=result_item.item_code, image_urls=result_item.image_urls, ranking=result_item.ranking)
-        context = {"result_item_list": result_item_list_sorted}
+    def get(self, request, *args, **kwargs):
+        keyword = request.GET["keyword"]
+        budget = int(request.GET["budget"])
+        page_index = self.kwargs["page"]
+        result_item_list = test_koya_APIListOperations.fetch_search_onepage_items(page_index, keyword)
+        result_item_list = test_koya_basic_library.set_living_expenses_to_result_item_list(result_item_list, budget)
+        context = {"result_item_list": result_item_list, "keyword": keyword, "budget": budget, "page_index": page_index}
         return super().render_to_response(context)
     
 class test_koya_RankingSearch(TemplateView):
@@ -88,6 +95,22 @@ class test_koya_APIListOperations:
         return result_item_list
     
     @staticmethod
+    def fetch_search_onepage_items(page_index, keyword):
+        search_url = "https://app.rakuten.co.jp/services/api/IchibaItem/Search/20220601"
+        res_data_list = []
+        params = {"applicationId" : "1086392607264524220",
+                    "keyword" : keyword,
+                    "format" : "json",
+                    "page" :page_index}   
+        res_data = requests.get(search_url, params).json()
+        res_data_list =  list(res_data["Items"])
+        result_item_list = []
+        for item in res_data_list:
+            result_item = test_koya_ResultItem(item["Item"]["itemName"], item["Item"]["itemPrice"], item["Item"]["itemCode"], item["Item"]["mediumImageUrls"], item["Item"]["itemUrl"])
+            result_item_list.append(result_item)
+        return result_item_list
+    
+    @staticmethod
     def bubble_sort_result_item_list_ascending_price(result_item_list_tmp):
         result_item_list_tmp = result_item_list_tmp.copy()
         for i in range(len(result_item_list_tmp)):
@@ -95,9 +118,22 @@ class test_koya_APIListOperations:
                 if result_item_list_tmp[j].item_price > result_item_list_tmp[j+1].item_price: #左の方が大きい場合
                     result_item_list_tmp[j], result_item_list_tmp[j+1] = result_item_list_tmp[j+1], result_item_list_tmp[j] #前後入れ替え
         return result_item_list_tmp
+
+class test_koya_basic_library:
+    @staticmethod
+    def set_living_expenses_to_result_item_list(result_item_list, budget):
+        result_item_list_tmp = result_item_list.copy()
+        for item in result_item_list_tmp:
+            remaining_budget = budget - item.item_price
+            today = datetime.datetime.today().day
+            month = datetime.datetime.today().month
+            remaining_days = (30 - today + 1) if month == 2 or month == 4 or month == 6 or month == 9 or month == 11 else (31 - today + 1)  
+            living_expenses = remaining_budget // remaining_days
+            item.living_expenses = living_expenses
+        return result_item_list_tmp
     
 class test_koya_ResultItem:
-    def __init__(self, name, price, item_code, image_urls):
+    def __init__(self, name, price, item_code, image_urls, item_url=None):
         self.item_name = name
         self.item_price = price
         self.item_code = item_code
@@ -105,8 +141,10 @@ class test_koya_ResultItem:
         for image_url in image_urls:
             self.image_urls.append(image_url["imageUrl"])
         self.image_url = self.image_urls[0]
+        self.item_url = item_url
         self.images = []
         self.ranking = None
+        self.living_expenses = None
 
 def test_yuto(request):
     return render(request, 'test_yuto.html', {})

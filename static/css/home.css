@@ -1,0 +1,38 @@
+.search-reasonable .form-container {
+  display: table;
+  max-width: 900px;
+  width: 90%;
+  margin: 10px auto;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+  background-color: rgb(245, 244, 244);
+  text-align: center;
+}
+
+.search-reasonable form {
+    text-align: center;
+}
+
+.search-reasonable .form-container .form-input {
+    border-radius: 5px;
+    height: 30px;
+    margin-right: 1%;
+    
+}
+ 
+.search-reasonable .form-container span {
+    font-size: 40px;
+    font-family: 'Anton', sans-serif;
+}
+
+.search_logo {
+    width: 25px;
+    height: 25px;
+    position: relative;
+    top: 7px;
+    left: 3px;
+}
+
+.budget_box {
+    width: 200px;
+}
+
