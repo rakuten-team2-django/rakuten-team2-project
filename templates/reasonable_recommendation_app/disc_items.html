@@ -1,14 +1,11 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Top 10 Least Sold Items</title>
-</head>
+{% extends "base.html" %} {% block content %}
 <body>
-    <h1>Top 10 Least Sold Items</h1>
-    <ul>
-        {% for item in top_10_least_sold_items %}
-            <li>{{ item.rank }}: {{ item.itemName }}</li>
-        {% endfor %}
-    </ul>
+  <h1>Top 10 Least Sold Items</h1>
+  <ul>
+    {% for item in top_10_least_sold_items %}
+    <li>{{ item.rank }}: {{ item.itemName }}</li>
+    {% endfor %}
+  </ul>
 </body>
-</html>
+{% endblock %}
+
