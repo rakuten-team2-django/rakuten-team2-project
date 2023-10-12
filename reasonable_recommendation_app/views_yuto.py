@@ -9,6 +9,8 @@ DISCOUNTRATE = 0.10 # 0.05
 TESTUSER = 1
 AGEMIN = 20
 AGEMAX = 30
+DISCOUNTRANKMIN = 450
+DISCOUNTRANKMAX = 500
 
 class DiscountApplier(ListView):
     # TODO: Change name
@@ -20,20 +22,36 @@ class DiscountApplier(ListView):
     paginate_by = 10
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        user_id = self.request.POST.get('user_id', TESTUSER) # TODO
+        self.context = super().get_context_data(**kwargs)
+        try:
+            user_id = self.request.user.id #self.request.POST.get('user_id', TESTUSER) # TODO
+        except Exception:
+            print("Need login")
+            return "Need login."
         user_info = User.objects.get(id=user_id)
-        
-        if check_age(user_info):
-            for item in context['object_list']:
+
+        for item in self.context['object_list']:
+            if check_age(user_info):
                 item = apply_discount(item)
                 item.discount_rate = DISCOUNTRATE
+            else:
+                item.price = Decimal(item.product_price).quantize(Decimal('0'), rounding=ROUND_HALF_UP)
 
-        return context
+        # context = self.sort_by_rank()
+        return self.context
+    
+    def sort_by_rank(self):
+        self.context['object_list'] = sorted(self.context['object_list'], key = lambda x: int(x.product_rank))
     
 def apply_discount(item):
-    item.price = item.price * (1 - DISCOUNTRATE)
-    item.price = Decimal(item.price).quantize(Decimal('0'), rounding=ROUND_HALF_UP)
+    # TODO: if table are defined, make code executable
+    # if DIDSCOUNTRANKMIN <= item.product_rank <= DISCOUNTRANKMAX:
+    priceproportion = 1 - DISCOUNTRATE
+    # else:
+    # priceproportion = 1
+
+    price = item.product_price * Decimal(priceproportion)
+    item.price = Decimal(price).quantize(Decimal('0'), rounding=ROUND_HALF_UP)
     return item
 
 def check_age(user):
@@ -43,3 +61,4 @@ def check_age(user):
         return True
     else:
         return False
+    
