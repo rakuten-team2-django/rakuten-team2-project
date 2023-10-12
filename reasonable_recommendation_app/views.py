@@ -168,18 +168,21 @@ def test_bibek(request):
         if response.status_code == 200:
             data = response.json()
             if "Items" in data.keys():
+                  Discounted_Items.objects.all().delete()
                   item_list=[]
                   for item in data['Items']:
                         item_list.append(item['Item'])
                   sorted_items = sorted(item_list, key=lambda x: int(x["rank"]))
-                  top_10_least_sold = sorted_items[:10]
+                  top_10_least_sold = sorted_items#[:10]
                   print(top_10_least_sold)
                   for item in top_10_least_sold:
                     Discounted_Items.objects.create(
                         product_id=item.get('itemCode'),
                         product_name=item.get('itemName'),
                         product_price=item.get('itemPrice'),
-                        productimg_url=item.get('itemUrl'),  
+                        productimg_url=item.get('mediumImageUrls', [None])[0].get('imageUrl', ""), 
+                        product_link = item.get('itemUrl'),
+                        product_rank = item.get('rank')
                   )
                   return render(request, 'reasonable_recommendation_app/disc_items.html', {'top_10_least_sold_items': top_10_least_sold})
             else:
