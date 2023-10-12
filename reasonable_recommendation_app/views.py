@@ -11,7 +11,7 @@ from django.core.management.base import BaseCommand
 from django.http import JsonResponse
 import datetime
 
-@login_required(login_url=reverse_lazy('login'))
+@login_required(login_url=reverse_lazy('reasonable_recommendation_app:login'))
 def home(request):
     if request.user.is_authenticated:
         user = request.user
