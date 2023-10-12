@@ -1,0 +1,65 @@
+{% load static %}
+<html>
+<head>
+    <title>template test</title>
+    <link rel="stylesheet" href="{% static 'css/home.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/search_reasonable.css' %}" />
+    <link href="https://fonts.googleapis.com/css?family=Anton" rel="stylesheet" />
+</head>
+<body>
+    <div class="search-reasonable">
+        <div class="form-container">
+            <span>Rakuten Reasonable</span>
+            <form action="{% url 'reasonable_recommendation_app:test_koya/search_reasonable' 1%}" method="get">{% csrf_token %}
+                <input type="text" name="keyword" class="form-input" placeholder="検索キーワード"/>
+                <input type="text" name="budget" class="form-input budget_box" placeholder="生活費残高を入力してください"/>
+                <input type="image" class="search_logo" src="{% static "images/search_logo.png" %}" width="30" height="30" />
+            </form>
+        </div>
+    </div>
+    <div class="search-result">
+        <h2>{{keyword}}の検索結果</h2>
+        <table border="1">
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Living Expenses</th>
+                <th>Images</th>
+            </tr>
+        
+        {% for result_item in result_item_list %}
+            <tr>
+                <td><a href="{{ result_item.item_url }}">{{ result_item.item_name }}</a></td>
+                <td>{{ result_item.item_price }}</td>
+                {% if result_item.living_expenses > 1000 and result_item.living_expenses <= 2000 %}
+                    <td class="living-expenses-normal">{{ result_item.living_expenses }} / day</td>
+                {% elif result_item.living_expenses > 2000 %}
+                    <td class="living-expenses-good" background="{% static 'images/okaimonopanda.png' %}">{{ result_item.living_expenses }} / day</td>
+                    <!-- <img src="{% static 'images/okaimonopanda.png' %}" width="100" height="100" style="text-align: center;"/></td> -->
+                {% else %}
+                    <td class="living-expenses-bad">{{ result_item.living_expenses }} / day</td>
+                {% endif %}
+                <td>
+                    <img src="{{ result_item.image_url }}">
+                </td>
+            </tr>
+        {% endfor %}
+        </table>
+    </div>
+    <div class="page-change">
+        <form method="get" class="form-container">{% csrf_token %}
+            <input type="hidden" name="keyword" value="{{ keyword }}">
+            <input type="hidden" name="budget" value="{{ budget }}">
+            {% with ''|center:9 as range %}
+            {% for _ in range %}
+                {% if page_index ==  forloop.counter %}
+                    <input type="button" value="{{ forloop.counter }}" style="background-color: gray;"/>
+                {% else %}
+                    <input type="submit" value="{{ forloop.counter }}" formaction="{% url 'reasonable_recommendation_app:test_koya/search_reasonable' forloop.counter %}"/>
+                {% endif %}
+            {% endfor %}
+            {% endwith %}
+        </form>
+    </div>
+</body>
+</html>
