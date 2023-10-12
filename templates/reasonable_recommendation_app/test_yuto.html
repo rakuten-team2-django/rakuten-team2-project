@@ -10,7 +10,7 @@
                 <li class="list-group-item w-25">Price</li>
                 <li class="list-group-item w-25">Discount</li>
             </ul>
-                {% for item in item_list %}
+                {% for item in object_list %}
                 <!--
             <ul style="display:flex;flex-wrap: wrap;">
                 <li style="width: calc(25% - 20px);">
@@ -25,9 +25,9 @@
                 -->
                 <a href="{{ item.link }}">
                     <ul class="list-group list-group-horizontal">
-                        <li class="list-group-item w-25"><img src="https://thumbnail.image.rakuten.co.jp/@0_mall/cloverintl1020/cabinet/08726499/mko2a01-2023-2.jpg?_ex=128x128"></li>
-                        <li class="list-group-item w-25">{{ item.itemname }}</li>
-                        <li class="list-group-item w-25">{{ item.price }}</li>
+                        <li class="list-group-item w-25"><img src="{{ item.productimg_url }}"></li>
+                        <li class="list-group-item w-25">{{ item.product_name }}</li>
+                        <li class="list-group-item w-25">{{ item.product_price }}</li>
                         <li class="list-group-item w-25">{{ item.discount_rate }}</li>
                     </ul>
                 </a>
