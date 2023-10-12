@@ -1,16 +1,36 @@
 {% extends "base.html" %} {% block content %}
+{% load static %}
 
-<h1>Welcome to the Home Page</h1>
-<p>This is the content of the home page.</p>
-
+<html>
+<head>
+<title>template test</title>
+<link rel="stylesheet" href="{% static 'css/home.css' %}" />
+<link href="https://fonts.googleapis.com/css?family=Anton" rel="stylesheet">
+</head>
+<body>
+<div class="search-reasonable">
+    <div class="form-container">
+        <span>Rakuten Reasonable</span>
+        <form action="{% url 'reasonable_recommendation_app:search_reasonable' 1%}" method="get">{% csrf_token %}
+            <input type="text" name="keyword" class="form-input" placeholder="検索キーワード"/>
+            <input type="text" name="budget" class="form-input budget_box" placeholder="生活費残高を入力してください"/>
+            <input type="image" class="search_logo" src="{% static "images/search_logo.png" %}" width="30" height="30" />
+        </form>
+    </div>
+</div>
 {% if user %}
-<h2>User Information</h2>
-<ul>
-  <li>Username: {{ user.username }}</li>
-  <li>Email: {{ user.email }}</li>
-  <li>Birthday: {{ user.birthday }}</li>
-</ul>
+    <div class="user-information">
+        <h2>Welcome to Rakuten Reasonable!</h2>
+        <ul>
+        <li>Username: {{ user.username }}</li>
+        <li>Email: {{ user.email }}</li>
+        <li>Birthday: {{ user.birthday }}</li>
+        </ul>
+    </div>
 {% else %}
-<p>Please log in</p>
-<a href="{% url 'login' %}">Login</a><br />
-{% endif %} {% endblock %}
+    <p>Please log in</p>
+    <a href="{% url 'reasonable_recommendation_app:login' %}">Login</a><br />
+{% endif %}
+</body>
+</html>
+{% endblock %}

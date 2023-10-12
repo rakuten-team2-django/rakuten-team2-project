@@ -24,6 +24,16 @@
     font-family: 'Anton', sans-serif;
 }
 
+.user-information {
+    max-width: 500px;
+    width: 70%;
+    margin: 30px auto;
+    padding: 10px 10px;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+    background-color: rgba(193, 27, 27, 0.549);
+
+}
+
 .search_logo {
     width: 25px;
     height: 25px;
@@ -33,6 +43,6 @@
 }
 
 .budget_box {
-    width: 200px;
+    width: 300px;
 }
 

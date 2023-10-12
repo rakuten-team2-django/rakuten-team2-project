@@ -1,0 +1,16 @@
+{% extends "base.html" %} {% block content %}
+
+<h1>Welcome to the Home Page</h1>
+<p>This is the content of the home page.</p>
+
+{% if user %}
+<h2>User Information</h2>
+<ul>
+  <li>Username: {{ user.username }}</li>
+  <li>Email: {{ user.email }}</li>
+  <li>Birthday: {{ user.birthday }}</li>
+</ul>
+{% else %}
+<p>Please log in</p>
+<a href="{% url 'login' %}">Login</a><br />
+{% endif %} {% endblock %}
