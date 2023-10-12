@@ -11,6 +11,7 @@ from django.core.management.base import BaseCommand
 from django.http import JsonResponse
 import datetime
 
+"""
 @login_required(login_url=reverse_lazy('reasonable_recommendation_app:login'))
 def home(request):
     if request.user.is_authenticated:
@@ -20,16 +21,22 @@ def home(request):
 
     context = {'user': user}
     return render(request, 'reasonable_recommendation_app/home.html', context)
-
-class test_koya_Home(TemplateView):
+"""
+class Home(TemplateView):
     def __init__(self):
-        self.template_name = "reasonable_recommendation_app/test_koya_home.html"
-        self.search_url = "https://app.rakuten.co.jp/services/api/IchibaItem/Search/20220601"
-        self.ranking_url = "https://app.rakuten.co.jp/services/api/IchibaItem/Ranking/20220601"
+        self.template_name = "reasonable_recommendation_app/home.html"
 
-class test_koya_Search_Reasonable(TemplateView):
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            user = request.user
+        else:
+            user = None
+        context = {'user': user}
+        return super().render_to_response(context)
+
+class Search_Reasonable(TemplateView):
     def __init__(self):
-        self.template_name = "reasonable_recommendation_app/test_koya_search_reasonable.html"
+        self.template_name = "reasonable_recommendation_app/search_reasonable.html"
         self.search_url = "https://app.rakuten.co.jp/services/api/IchibaItem/Search/20220601"
         self.ranking_url = "https://app.rakuten.co.jp/services/api/IchibaItem/Ranking/20220601"
     
@@ -42,7 +49,7 @@ class test_koya_Search_Reasonable(TemplateView):
         context = {"result_item_list": result_item_list, "keyword": keyword, "budget": budget, "page_index": page_index}
         return super().render_to_response(context)
     
-class test_koya_RankingSearch(TemplateView):
+class RankingSearch(TemplateView):
     def __init__(self):
         self.template_name = "reasonable_recommendation_app/test_koya2.html"
         self.search_url = "https://app.rakuten.co.jp/services/api/IchibaItem/Search/20220601"

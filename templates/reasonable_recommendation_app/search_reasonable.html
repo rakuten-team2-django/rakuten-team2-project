@@ -1,3 +1,4 @@
+{% extends "base.html" %} {% block content %}
 {% load static %}
 <html>
 <head>
@@ -10,7 +11,7 @@
     <div class="search-reasonable">
         <div class="form-container">
             <span>Rakuten Reasonable</span>
-            <form action="{% url 'reasonable_recommendation_app:test_koya/search_reasonable' 1%}" method="get">{% csrf_token %}
+            <form action="{% url 'reasonable_recommendation_app:search_reasonable' 1%}" method="get">{% csrf_token %}
                 <input type="text" name="keyword" class="form-input" placeholder="検索キーワード"/>
                 <input type="text" name="budget" class="form-input budget_box" placeholder="生活費残高を入力してください"/>
                 <input type="image" class="search_logo" src="{% static "images/search_logo.png" %}" width="30" height="30" />
@@ -55,7 +56,7 @@
                 {% if page_index ==  forloop.counter %}
                     <input type="button" value="{{ forloop.counter }}" style="background-color: gray;"/>
                 {% else %}
-                    <input type="submit" value="{{ forloop.counter }}" formaction="{% url 'reasonable_recommendation_app:test_koya/search_reasonable' forloop.counter %}"/>
+                    <input type="submit" value="{{ forloop.counter }}" formaction="{% url 'reasonable_recommendation_app:search_reasonable' forloop.counter %}"/>
                 {% endif %}
             {% endfor %}
             {% endwith %}
@@ -63,3 +64,4 @@
     </div>
 </body>
 </html>
+{% endblock %}
