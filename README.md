@@ -122,7 +122,7 @@ you should ask,
 - 03:55pm - 04:25pm team2
 - 04:25pm - 04:55pm team3
 - 05:00pm - 05:30pm team4
-- 05:30pm - 05:00pm team5
+- 05:30pm - 06:00pm team5
 
 ## urls
 
