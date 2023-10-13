@@ -162,6 +162,7 @@ def test_bibek(request):
     params = {
         "format": "json",
         "applicationId": 1007895533761095400,
+        "age": 20,
     }
     app_id = "1007895533761095400"
     api_url = "https://app.rakuten.co.jp/services/api/IchibaItem/Ranking/20220601"
