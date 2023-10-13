@@ -9,8 +9,8 @@ DISCOUNTRATE = 0.10 # 0.05
 TESTUSER = 1
 AGEMIN = 20
 AGEMAX = 30
-DISCOUNTRANKMIN = 450
-DISCOUNTRANKMAX = 500
+DISCOUNTRANKMIN = 900
+DISCOUNTRANKMAX = 1000
 
 class DiscountApplier(ListView):
     # TODO: Change name
@@ -37,18 +37,18 @@ class DiscountApplier(ListView):
             else:
                 item.price = Decimal(item.product_price).quantize(Decimal('0'), rounding=ROUND_HALF_UP)
 
-        # context = self.sort_by_rank()
+        self.sort_by_rank()
         return self.context
     
     def sort_by_rank(self):
-        self.context['object_list'] = sorted(self.context['object_list'], key = lambda x: int(x.product_rank))
+        self.context['object_list'] = sorted(self.context['object_list'], key = lambda x: int(x.product_rank), reverse=True)
     
 def apply_discount(item):
     # TODO: if table are defined, make code executable
-    # if DIDSCOUNTRANKMIN <= item.product_rank <= DISCOUNTRANKMAX:
-    priceproportion = 1 - DISCOUNTRATE
-    # else:
-    # priceproportion = 1
+    if DISCOUNTRANKMIN <= item.product_rank <= DISCOUNTRANKMAX:
+        priceproportion = 1 - DISCOUNTRATE
+    else:
+        priceproportion = 1
 
     price = item.product_price * Decimal(priceproportion)
     item.price = Decimal(price).quantize(Decimal('0'), rounding=ROUND_HALF_UP)
