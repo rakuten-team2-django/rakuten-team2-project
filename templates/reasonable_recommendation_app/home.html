@@ -19,14 +19,6 @@
     </div>
 </div>
 {% if user %}
-    <div class="user-information">
-        <h2>Welcome to Rakuten Reasonable!</h2>
-        <ul>
-        <li>Username: {{ user.username }}</li>
-        <li>Email: {{ user.email }}</li>
-        <li>Birthday: {{ user.birthday }}</li>
-        </ul>
-    </div>
 {% else %}
     <p>Please log in</p>
     <a href="{% url 'reasonable_recommendation_app:login' %}">Login</a><br />
