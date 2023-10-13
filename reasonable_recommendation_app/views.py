@@ -166,44 +166,52 @@ def test_bibek(request):
     app_id = "1007895533761095400"
     api_url = "https://app.rakuten.co.jp/services/api/IchibaItem/Ranking/20220601"
 
-    Discounted_Items.objects.all().delete()
     try:
-        for page in range(1, MAXPAGE+1):
-            params['page'] = page
-            time.sleep(0.1)
-            response = requests.get(api_url, params=params)
-            try:
-                if response.json().get('error', '') == "wrong_parameter":
-                    continue
-            except Exception:
-                pass
-            if response.status_code == 200:
-                data = response.json()
-                if "Items" in data.keys():
-                    item_list=[]
-                    for item in data['Items']:
-                            item_list.append(item['Item'])
-                    sorted_items = sorted(item_list, key=lambda x: int(x["rank"]))
-                    top_10_least_sold = sorted_items#[:10]
-                    #print(top_10_least_sold)
-                    for item in top_10_least_sold:
-                        Discounted_Items.objects.create(
-                            product_id=item.get('itemCode'),
-                            product_name=item.get('itemName'),
-                            product_price=item.get('itemPrice'),
-                            productimg_url=item.get('mediumImageUrls', [None])[0].get('imageUrl', ""), 
-                            product_link = item.get('itemUrl'),
-                            product_rank = item.get('rank')
-                    )
+        item_cnt = Discounted_Items.objects.all().count()
+    except Exception:
+        item_cnt = 0
+    if item_cnt < 700:
+        Discounted_Items.objects.all().delete()
+        try:
+            for page in range(1, MAXPAGE+1):
+                params['page'] = page
+                time.sleep(0.1)
+                response = requests.get(api_url, params=params)
+                try:
+                    if response.json().get('error', '') == "wrong_parameter":
+                        continue
+                except Exception:
+                    pass
+                if response.status_code == 200:
+                    data = response.json()
+                    if "Items" in data.keys():
+                        item_list=[]
+                        for item in data['Items']:
+                                item_list.append(item['Item'])
+                        sorted_items = sorted(item_list, key=lambda x: int(x["rank"]))
+                        top_10_least_sold = sorted_items#[:10]
+                        #print(top_10_least_sold)
+                        for item in top_10_least_sold:
+                            Discounted_Items.objects.create(
+                                product_id=item.get('itemCode'),
+                                product_name=item.get('itemName'),
+                                product_price=item.get('itemPrice'),
+                                productimg_url=item.get('mediumImageUrls', [None])[0].get('imageUrl', ""), 
+                                product_link = item.get('itemUrl'),
+                                product_rank = item.get('rank')
+                        )
+                    else:
+                        return render(request, 'reasonable_recommendation_app/error.html', {'message': 'No ranking information found in the response.'})
+                        
                 else:
-                    return render(request, 'reasonable_recommendation_app/error.html', {'message': 'No ranking information found in the response.'})
-                    
-            else:
-                return render(request, 'reasonable_recommendation_app/error.html', {'message': f'Failed to fetch data. Status code: {response.status_code}'})
-        
-        return render(request, 'reasonable_recommendation_app/disc_items.html', {'top_10_least_sold_items': top_10_least_sold})
-    except Exception as e:
-           return render(request, 'reasonable_recommendation_app/error.html', {'message': f'An error occurred: {str(e)}'})
+                    return render(request, 'reasonable_recommendation_app/error.html', {'message': f'Failed to fetch data. Status code: {response.status_code}'})
+            
+            return render(request, 'reasonable_recommendation_app/disc_items.html', {'top_10_least_sold_items': top_10_least_sold})
+        except Exception as e:
+            return render(request, 'reasonable_recommendation_app/error.html', {'message': f'An error occurred: {str(e)}'})
+    else:
+        return render(request, 'reasonable_recommendation_app/disc_items.html')# "Database collection step skipped."
+
     
 def rep_data(request):
     item=Discounted_Items.objects.all()
