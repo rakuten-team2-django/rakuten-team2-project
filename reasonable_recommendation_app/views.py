@@ -165,10 +165,12 @@ def test_bibek(request):
     }
     app_id = "1007895533761095400"
     api_url = "https://app.rakuten.co.jp/services/api/IchibaItem/Ranking/20220601"
+
+    Discounted_Items.objects.all().delete()
     try:
         for page in range(1, MAXPAGE+1):
             params['page'] = page
-            time.sleep(0.5)
+            time.sleep(0.1)
             response = requests.get(api_url, params=params)
             try:
                 if response.json().get('error', '') == "wrong_parameter":
@@ -183,7 +185,7 @@ def test_bibek(request):
                             item_list.append(item['Item'])
                     sorted_items = sorted(item_list, key=lambda x: int(x["rank"]))
                     top_10_least_sold = sorted_items#[:10]
-                    print(top_10_least_sold)
+                    #print(top_10_least_sold)
                     for item in top_10_least_sold:
                         Discounted_Items.objects.create(
                             product_id=item.get('itemCode'),

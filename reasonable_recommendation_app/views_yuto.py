@@ -9,17 +9,21 @@ DISCOUNTRATE = 0.10 # 0.05
 TESTUSER = 1
 AGEMIN = 20
 AGEMAX = 30
-DISCOUNTRANKMIN = 900
-DISCOUNTRANKMAX = 1000
+TOP700FOR5PERCENT = 700
+TOP900FOR10PERCENT = 900
+DISCOUNT10PERCENTRATE = 0.1
+DISCOUNT5PRTCENTRATE = 0.05
 
 class DiscountApplier(ListView):
     # TODO: Change name
     model = Discounted_Items
+    #model.objects.order_by("-product_rank")
 
     # TODO: Change name
     template_name = 'reasonable_recommendation_app/test_yuto.html'
 
     paginate_by = 10
+    ordering = ["-product_rank"]
 
     def get_context_data(self, **kwargs):
         self.context = super().get_context_data(**kwargs)
@@ -33,11 +37,9 @@ class DiscountApplier(ListView):
         for item in self.context['object_list']:
             if check_age(user_info):
                 item = apply_discount(item)
-                item.discount_rate = DISCOUNTRATE
             else:
                 item.price = Decimal(item.product_price).quantize(Decimal('0'), rounding=ROUND_HALF_UP)
 
-        self.sort_by_rank()
         return self.context
     
     def sort_by_rank(self):
@@ -45,9 +47,17 @@ class DiscountApplier(ListView):
     
 def apply_discount(item):
     # TODO: if table are defined, make code executable
-    if DISCOUNTRANKMIN <= item.product_rank <= DISCOUNTRANKMAX:
-        priceproportion = 1 - DISCOUNTRATE
-    else:
+    try:
+        if item.product_rank >= TOP900FOR10PERCENT:
+            priceproportion = 1 - DISCOUNTRATE
+            item.discount_rate = f"{int(DISCOUNT10PERCENTRATE * 100)}%"
+        elif item.product_rank >= TOP700FOR5PERCENT:
+            priceproportion = 1 - DISCOUNTRATE
+            item.discount_rate = f"{int(DISCOUNT5PRTCENTRATE * 100)}%"
+        else:
+            priceproportion = 1
+    except Exception:
+        print("error")
         priceproportion = 1
 
     price = item.product_price * Decimal(priceproportion)
