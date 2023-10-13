@@ -23,11 +23,11 @@
                 </li>
             </ul>
                 -->
-                <a href="{{ item.link }}">
+                <a href="{{ item.product_link }}">
                     <ul class="list-group list-group-horizontal">
                         <li class="list-group-item w-25"><img src="{{ item.productimg_url }}"></li>
                         <li class="list-group-item w-25">{{ item.product_name }}</li>
-                        <li class="list-group-item w-25">{% if item.price < item.product_price %}<p><strike>{{ item.product_price }}</strike></p>{% endif %}<span style="font-size: 30px; font-style: italic; ">{{ item.price }}</span></li>
+                        <li class="list-group-item w-25">{% if item.price < item.product_price %}<p><strike>{{ item.product_price }}円</strike></p>{% endif %}<span style="font-size: 30px; font-style: italic; ">{{ item.price }}円</span></li>
                         <li class="list-group-item w-25"><span style="background: linear-gradient(transparent 60%, #ff99ff 60%); font-size: 30px; font-weight: bold; font-style: italic; ">{{ item.discount_rate }}</span></li>
                     </ul>
                 </a>
