@@ -97,6 +97,13 @@ you should ask,
 "How much revenue can we generate?"
 "What is the future growth potential?"
 
+### presentation explanation
+
+- 1~5: bibek
+- 6~8: koya
+- 9~10: yuto(including demo)
+- 11~14: akiba
+
 ## [individual presentation]
 
 - maximum 2 minutes per person
