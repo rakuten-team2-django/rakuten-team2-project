@@ -14,6 +14,9 @@ TOP700FOR5PERCENT = 700
 TOP900FOR10PERCENT = 900
 DISCOUNT10PERCENTRATE = 0.1
 DISCOUNT5PRTCENTRATE = 0.05
+DISCOUNTRANGE = 10
+DISCOUNTDIFF = 0.01
+MAXDISCOUNT = 0.10
 
 class DiscountApplier(ListView):
     # TODO: Change name
@@ -50,12 +53,17 @@ class DiscountApplier(ListView):
 def apply_discount(item):
     # TODO: if table are defined, make code executable
     try:
+        """
         if item.product_rank >= TOP900FOR10PERCENT:
             priceproportion = 1 - DISCOUNTRATE
             item.discount_rate = f"{int(DISCOUNT10PERCENTRATE * 100)}%"
         elif item.product_rank >= TOP700FOR5PERCENT:
             priceproportion = 1 - DISCOUNTRATE
             item.discount_rate = f"{int(DISCOUNT5PRTCENTRATE * 100)}%"
+            """
+        if item.product_rank > (1000 - (MAXDISCOUNT / DISCOUNTDIFF) * DISCOUNTRANGE):
+            priceproportion = 1 - ( MAXDISCOUNT - (((1000 - item.product_rank) // DISCOUNTRANGE) * DISCOUNTDIFF )) 
+            item.discount_rate = f"{int(( MAXDISCOUNT - (((1000 - item.product_rank) // DISCOUNTRANGE) * DISCOUNTDIFF )) * 100)}%"
         else:
             priceproportion = 1
     except Exception:
