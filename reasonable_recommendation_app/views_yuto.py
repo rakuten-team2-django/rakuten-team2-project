@@ -4,6 +4,7 @@ from django.views.generic import ListView
 from .models import User, Discounted_Items # TODO
 import datetime
 from decimal import Decimal, ROUND_HALF_UP
+from . import views
 
 DISCOUNTRATE = 0.10 # 0.05
 TESTUSER = 1
@@ -26,6 +27,7 @@ class DiscountApplier(ListView):
     ordering = ["-product_rank"]
 
     def get_context_data(self, **kwargs):
+        views.test_bibek(self.request)
         self.context = super().get_context_data(**kwargs)
         try:
             user_id = self.request.user.id #self.request.POST.get('user_id', TESTUSER) # TODO
